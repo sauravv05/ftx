@@ -210,12 +210,6 @@ class FtxClient:
                 total_usd += balance['usdValue']
         return total_usd
 
-    def get_deposit_address(self, ticker: str) -> dict:
-        return self._get(f'wallet/deposit_address/{ticker}')
-
-    def get_deposit_history(self) -> List[dict]:
-        return self._get('wallet/deposits')
-
     def get_positions(self, show_avg_price: bool = False) -> List[dict]:
         return self._get('positions', {'showAvgPrice': show_avg_price})
 
@@ -325,11 +319,19 @@ class FtxClient:
     def get_subaccount_balances(self, nickname: str) -> List[dict]:
         return self._get(f'subaccounts/{nickname}/balances')
 
-    def get_withdrawal_fee(self, coin: str, size: int, address: str, tag: str = None) -> Dict:
+    def get_deposit_address(self, ticker: str) -> dict:
+        return self._get(f'wallet/deposit_address/{ticker}')
+
+    def get_deposit_history(self) -> List[dict]:
+        return self._get('wallet/deposits')
+
+    def get_withdrawal_fee(self, coin: str, size: int, address: str, method: str = None, tag: str = None) -> Dict:
         return self._get('wallet/withdrawal_fee', {
             'coin': coin,
             'size': size,
-            'address': address
+            'address': address,
+            'method': method,
+            'tag': tag
         })
 
     def get_withdrawals(self, start_time: float = None, end_time: float = None) -> List[dict]:
